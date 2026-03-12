@@ -3,142 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liquidador Laboral - Vibras Positivas</title>
+    <title>Liquidador Pro - Vibras Positivas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
     
     <style>
         :root { --primary-color: #2c3e50; --accent-color: #27ae60; }
-        body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .header-app { background: var(--primary-color); color: white; padding: 20px 0; margin-bottom: 30px; border-bottom: 5px solid var(--accent-color); }
-        .card { border: none; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .card-header { background: #fff; font-weight: bold; border-bottom: 1px solid #eee; border-radius: 15px 15px 0 0 !important; }
-        .btn-vibras { background-color: var(--accent-color); color: white; transition: 0.3s; }
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
+        .header-app { background: var(--primary-color); color: white; padding: 20px 0; border-bottom: 5px solid var(--accent-color); }
+        .card { border: none; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .btn-vibras { background-color: var(--accent-color); color: white; font-weight: bold; margin: 2px; border: none; }
         .btn-vibras:hover { background-color: #219150; color: white; }
-        .firma-box { border-bottom: 2px solid #333; height: 80px; width: 80%; margin: 0 auto; }
-        @media print { .no-print { display: none; } }
+        .firma-box { border: 2px dashed #ccc; background: #fff; height: 120px; border-radius: 8px; width: 100%; }
+        canvas { width: 100%; height: 100%; touch-action: none; }
+        @media print { .no-print { display: none !important; } .card { box-shadow: none; border: 1px solid #ddd; } }
     </style>
 </head>
 <body>
 
 <div class="header-app text-center">
-    <h1>LIQUIDADOR LABORAL COLOMBIA 2026</h1>
+    <h2>LIQUIDADOR LABORAL COLOMBIA 2026</h2>
     <p>Desarrollado por <strong>Vibras Positivas</strong> | Caucasia: 3117700431</p>
 </div>
 
-<div class="container mb-5">
-    <div class="card">
-        <div class="card-header text-primary">CONFIGURACIÓN INICIAL</div>
-        <div class="card-body">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label">Nombre de la Empresa</label>
-                    <input type="text" id="empresaNombre" class="form-control" placeholder="Ej: Distrileco S.A.S">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">NIT</label>
-                    <input type="text" id="empresaNit" class="form-control" placeholder="900.123.456-7">
-                </div>
+<div class="container mt-4 pb-5">
+    <div class="card no-print">
+        <div class="card-header bg-white font-weight-bold">CONFIGURACIÓN DE EMPRESA</div>
+        <div class="card-body row">
+            <div class="col-md-6">
+                <label>Nombre de la Empresa</label>
+                <input type="text" id="empresaNombre" class="form-control" placeholder="Ej: DISTRILECO CAUCASIA SAS">
+            </div>
+            <div class="col-md-6">
+                <label>NIT</label>
+                <input type="text" id="empresaNit" class="form-control" placeholder="800183056-9">
             </div>
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-header text-success">DATOS DEL TRABAJADOR (MÓDULO MAESTRO)</div>
-        <div class="card-body">
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <label class="form-label">Nombre Completo</label>
-                    <input type="text" id="tNombre" class="form-control" placeholder="Nombre del empleado">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Identificación</label>
-                    <input type="number" id="tCedula" class="form-control">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Salario Mensual ($)</label>
-                    <input type="number" id="tSalario" class="form-control" value="1300000">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Fecha Inicio</label>
-                    <input type="date" id="fInicio" class="form-control">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Fecha Fin (Corte)</label>
-                    <input type="date" id="fFin" class="form-control">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Días a Liquidar</label>
-                    <input type="number" id="tDias" class="form-control" placeholder="Automático si pones fechas" readonly>
-                </div>
-            </div>
-            <div class="mt-3">
-                <button class="btn btn-secondary btn-sm" onclick="calcularDias()">Calcular Días de Fechas</button>
-            </div>
+    <div class="card no-print border-success">
+        <div class="card-header bg-success text-white text-center font-weight-bold">DATOS DEL TRABAJADOR (MÓDULO MAESTRO)</div>
+        <div class="card-body row g-3">
+            <div class="col-md-4"><label>Nombre Completo</label><input type="text" id="tNombre" class="form-control" placeholder="HAROLD A MARIN M"></div>
+            <div class="col-md-4"><label>Identificación</label><input type="number" id="tCedula" class="form-control"></div>
+            <div class="col-md-4"><label>Salario Mensual ($)</label><input type="number" id="tSalario" class="form-control" value="1300000"></div>
+            <div class="col-md-4"><label>Fecha Inicio</label><input type="date" id="fInicio" class="form-control" onchange="calcularDias()"></div>
+            <div class="col-md-4"><label>Fecha Fin (Corte)</label><input type="date" id="fFin" class="form-control" onchange="calcularDias()"></div>
+            <div class="col-md-4"><label>Días a Liquidar</label><input type="number" id="tDias" class="form-control" placeholder="Ej: 30 o 360"></div>
+        </div>
+        <div class="card-footer bg-white no-print">
+            <button class="btn btn-secondary btn-sm" onclick="calcularDias()">Recalcular Días Automáticamente</button>
         </div>
     </div>
 
-    <div class="row no-print">
+    <div class="row no-print g-2">
         <div class="col-md-4">
             <div class="card text-center p-3">
-                <h6>Nómina Mensual</h6>
-                <button class="btn btn-vibras" onclick="liquidarNomina()">Generar Colilla</button>
+                <h6>Pagos Mensuales</h6>
+                <button class="btn btn-primary w-100" onclick="liquidarNomina()">GENERAR NÓMINA / COLILLA</button>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card text-center p-3">
-                <h6>Prestaciones Sociales</h6>
-                <button class="btn btn-vibras" onclick="liquidarPrestaciones()">Liquidar Todo</button>
+        <div class="col-md-8">
+            <div class="card p-3">
+                <h6 class="text-center">Prestaciones Sociales (Módulos Individuales)</h6>
+                <div class="d-flex flex-wrap justify-content-center">
+                    <button class="btn btn-vibras" onclick="liquidarConcepto('PRIMA')">LIQUIDAR PRIMAS</button>
+                    <button class="btn btn-vibras" onclick="liquidarConcepto('CESANTIAS')">LIQUIDAR CESANTÍAS</button>
+                    <button class="btn btn-vibras" onclick="liquidarConcepto('INTERESES')">INTERESES CESANTÍAS</button>
+                    <button class="btn btn-vibras" onclick="liquidarConcepto('VACACIONES')">LIQUIDAR VACACIONES</button>
+                </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card text-center p-3">
-                <h6>Copia de Seguridad</h6>
-                <button class="btn btn-dark" onclick="generarBackup()">Backup Datos</button>
-            </div>
+        <div class="col-md-12">
+            <button class="btn btn-danger w-100 p-3 font-weight-bold" onclick="liquidarTodo()">LIQUIDAR TODO (RETIRO DEFINITIVO DEL TRABAJADOR)</button>
         </div>
     </div>
 
-    <div id="resultadoSeccion" class="card d-none">
+    <div id="resultadoSeccion" class="card d-none mt-4">
         <div class="card-body" id="printArea">
-            <div class="text-center mb-4">
-                <h3 id="resEmpresa">EMPRESA</h3>
+            <div class="text-center">
+                <h3 id="resEmpresa"></h3>
                 <p>NIT: <span id="resNit"></span></p>
                 <hr>
-                <h4>RESUMEN DE LIQUIDACIÓN LABORAL</h4>
+                <h4 id="resTitulo" class="text-uppercase font-weight-bold"></h4>
             </div>
             
-            <div id="detalleCalculos" class="mb-4">
+            <div id="detalleCalculos" class="my-4">
                 </div>
 
             <div class="row mt-5">
                 <div class="col-6 text-center">
-                    <div class="firma-box"></div>
-                    <p class="mt-2">Firma Autorizada (Empleador)</p>
+                    <div class="firma-box no-print"><canvas id="pad1"></canvas></div>
+                    <div class="mt-2 border-top border-dark mx-auto w-75">Firma Elaborado Por</div>
+                    <button class="btn btn-sm btn-link no-print" onclick="signature1.clear()">Borrar</button>
                 </div>
                 <div class="col-6 text-center">
-                    <div class="firma-box"></div>
-                    <p class="mt-2">Firma del Trabajador (C.C. <span id="resCedula"></span>)</p>
+                    <div class="firma-box no-print"><canvas id="pad2"></canvas></div>
+                    <div class="mt-2 border-top border-dark mx-auto w-75">Firma Trabajador (C.C. <span id="resCedula"></span>)</div>
+                    <button class="btn btn-sm btn-link no-print" onclick="signature2.clear()">Borrar</button>
                 </div>
             </div>
             
-            <div class="mt-4 text-center small text-muted">
-                Documento generado por App Liquidador de Vibras Positivas (3117700431)
-            </div>
+            <p class="mt-5 text-center small text-muted">Documento generado por App Liquidador de Vibras Positivas (3117700431).<br>Caucasia, Antioquia - Derechos Reservados 2026</p>
         </div>
         
-        <div class="card-footer d-flex justify-content-between no-print">
-            <button class="btn btn-outline-danger" onclick="window.print()">Imprimir PDF / Colilla</button>
-            <button class="btn btn-outline-success" onclick="exportarExcel()">Descargar Excel</button>
-            <button class="btn btn-primary" onclick="enviarWhatsApp()">Enviar WhatsApp Detallado</button>
+        <div class="card-footer d-flex justify-content-between no-print p-3 bg-white">
+            <button class="btn btn-outline-danger" onclick="window.print()">IMPRIMIR / PDF</button>
+            <button class="btn btn-outline-success" onclick="exportarExcel()">DESCARGAR EXCEL</button>
+            <button class="btn btn-primary" onclick="enviarWhatsApp()">ENVIAR A WHATSAPP</button>
         </div>
     </div>
 </div>
 
 <script>
-    // Constantes Legales Colombia 2026 (Valores Sugeridos)
+    // Valores Legales 2026
     const SMMLV = 1300000;
-    const AUX_TRANSPORTE = 162000;
+    const AUX_TRANS = 162000;
+    let signature1, signature2;
+
+    window.onload = () => {
+        // Inicializar lienzos de firma
+        signature1 = new SignaturePad(document.getElementById('pad1'));
+        signature2 = new SignaturePad(document.getElementById('pad2'));
+    };
 
     function calcularDias() {
         const f1 = new Date(document.getElementById('fInicio').value);
@@ -150,98 +138,108 @@
         }
     }
 
-    function prepararVista() {
+    function prepararVista(titulo) {
         document.getElementById('resultadoSeccion').classList.remove('d-none');
-        document.getElementById('resEmpresa').innerText = document.getElementById('empresaNombre').value || "EMPRESA NO REGISTRADA";
-        document.getElementById('resNit').innerText = document.getElementById('empresaNit').value || "N/A";
-        document.getElementById('resCedula').innerText = document.getElementById('tCedula').value || "_______";
+        document.getElementById('resEmpresa').innerText = document.getElementById('empresaNombre').value || "EMPRESA SIN NOMBRE";
+        document.getElementById('resNit').innerText = document.getElementById('empresaNit').value || "---";
+        document.getElementById('resCedula').innerText = document.getElementById('tCedula').value || "---";
+        document.getElementById('resTitulo').innerText = titulo;
     }
 
     function liquidarNomina() {
-        prepararVista();
-        const salario = parseFloat(document.getElementById('tSalario').value);
-        const dias = parseInt(document.getElementById('tDias').value) || 30;
+        prepararVista("Colilla de Pago de Nómina Mensual");
+        const sal = parseFloat(document.getElementById('tSalario').value) || 0;
+        const dias = parseInt(document.getElementById('tDias').value) || 0;
         
-        const sueldoBruto = (salario / 30) * dias;
-        const auxTrans = (salario <= (SMMLV * 2)) ? (AUX_TRANSPORTE / 30) * dias : 0;
-        const salud = sueldoBruto * 0.04;
-        const pension = sueldoBruto * 0.04;
-        const neto = sueldoBruto + auxTrans - salud - pension;
+        const sueldo = (sal / 30) * dias;
+        const aux = (sal <= SMMLV * 2) ? (AUX_TRANS / 30) * dias : 0;
+        const salud = sueldo * 0.04;
+        const pens = sueldo * 0.04;
+        const neto = sueldo + aux - salud - pens;
 
         document.getElementById('detalleCalculos').innerHTML = `
             <table class="table table-bordered">
-                <tr class="table-dark"><th>Concepto Nómina</th><th>Valor</th></tr>
-                <tr><td>Sueldo por ${dias} días</td><td>$${sueldoBruto.toLocaleString()}</td></tr>
-                <tr><td>Auxilio de Transporte</td><td>$${auxTrans.toLocaleString()}</td></tr>
-                <tr><td>Descuento Salud (4%)</td><td class="text-danger">-$${salud.toLocaleString()}</td></tr>
-                <tr><td>Descuento Pensión (4%)</td><td class="text-danger">-$${pension.toLocaleString()}</td></tr>
-                <tr class="table-info"><th>TOTAL NETO PAGADO</th><th>$${neto.toLocaleString()}</th></tr>
-            </table>
-        `;
+                <tr class="table-dark"><th>Concepto</th><th class="text-end">Valor</th></tr>
+                <tr><td>Sueldo Básico (${dias} días)</td><td class="text-end">$${sueldo.toLocaleString()}</td></tr>
+                <tr><td>Auxilio de Transporte</td><td class="text-end">$${aux.toLocaleString()}</td></tr>
+                <tr><td>Deducción Salud (4%)</td><td class="text-end text-danger">-$${salud.toLocaleString()}</td></tr>
+                <tr><td>Deducción Pensión (4%)</td><td class="text-end text-danger">-$${pens.toLocaleString()}</td></tr>
+                <tr class="table-info font-weight-bold"><th>TOTAL NETO A PAGAR</th><th class="text-end">$${neto.toLocaleString()}</th></tr>
+            </table>`;
     }
 
-    function liquidarPrestaciones() {
-        prepararVista();
-        const salario = parseFloat(document.getElementById('tSalario').value);
-        const dias = parseInt(document.getElementById('tDias').value) || 360;
-        const base = salario + (salario <= (SMMLV * 2) ? AUX_TRANSPORTE : 0);
+    function liquidarConcepto(tipo) {
+        prepararVista("Liquidación Parcial: " + tipo);
+        const sal = parseFloat(document.getElementById('tSalario').value) || 0;
+        const dias = parseInt(document.getElementById('tDias').value) || 0;
+        const base = sal + (sal <= SMMLV * 2 ? AUX_TRANS : 0);
+        let valor = 0;
+        let tabla = `<table class="table table-bordered"><tr class="table-dark"><th>Concepto</th><th class="text-end">Valor</th></tr>`;
+
+        if(tipo === 'PRIMA') {
+            valor = (base * dias) / 360;
+            tabla += `<tr><td>Prima de Servicios (${dias} días)</td><td class="text-end">$${valor.toLocaleString()}</td></tr>`;
+        } else if(tipo === 'CESANTIAS') {
+            valor = (base * dias) / 360;
+            tabla += `<tr><td>Cesantías (${dias} días)</td><td class="text-end">$${valor.toLocaleString()}</td></tr>`;
+        } else if(tipo === 'INTERESES') {
+            let ces = (base * dias) / 360;
+            valor = (ces * dias * 0.12) / 360;
+            tabla += `<tr><td>Intereses sobre Cesantías (12%)</td><td class="text-end">$${valor.toLocaleString()}</td></tr>`;
+        } else if(tipo === 'VACACIONES') {
+            valor = (sal * dias) / 720;
+            tabla += `<tr><td>Vacaciones (${dias} días)</td><td class="text-end">$${valor.toLocaleString()}</td></tr>`;
+        }
+
+        tabla += `<tr class="table-success font-weight-bold"><th>TOTAL A PAGAR</th><th class="text-end">$${valor.toLocaleString()}</th></tr></table>`;
+        document.getElementById('detalleCalculos').innerHTML = tabla;
+    }
+
+    function liquidarTodo() {
+        prepararVista("Liquidación Final de Contrato (Prestaciones Sociales)");
+        const sal = parseFloat(document.getElementById('tSalario').value) || 0;
+        const dias = parseInt(document.getElementById('tDias').value) || 0;
+        const base = sal + (sal <= SMMLV * 2 ? AUX_TRANS : 0);
 
         const prima = (base * dias) / 360;
         const cesantias = (base * dias) / 360;
         const intCesantias = (cesantias * dias * 0.12) / 360;
-        const vacaciones = (salario * dias) / 720;
+        const vacaciones = (sal * dias) / 720;
         const total = prima + cesantias + intCesantias + vacaciones;
 
         document.getElementById('detalleCalculos').innerHTML = `
             <table class="table table-bordered">
-                <tr class="table-dark"><th>Prestaciones Sociales</th><th>Cálculo (${dias} días)</th></tr>
-                <tr><td>Primas de Servicios</td><td>$${prima.toLocaleString()}</td></tr>
-                <tr><td>Cesantías</td><td>$${cesantias.toLocaleString()}</td></tr>
-                <tr><td>Intereses a las Cesantías</td><td>$${intCesantias.toLocaleString()}</td></tr>
-                <tr><td>Vacaciones</td><td>$${vacaciones.toLocaleString()}</td></tr>
-                <tr class="table-success"><th>TOTAL PRESTACIONES</th><th>$${total.toLocaleString()}</th></tr>
-            </table>
-        `;
+                <thead class="table-dark"><tr><th>Concepto</th><th>Cálculo</th><th class="text-end">Valor</th></tr></thead>
+                <tr><td>Prima de Servicios</td><td>(${base.toLocaleString()} * ${dias}) / 360</td><td class="text-end">$${prima.toLocaleString()}</td></tr>
+                <tr><td>Cesantías</td><td>(${base.toLocaleString()} * ${dias}) / 360</td><td class="text-end">$${cesantias.toLocaleString()}</td></tr>
+                <tr><td>Intereses a las Cesantías</td><td>(${cesantias.toLocaleString()} * ${dias} * 0.12) / 360</td><td class="text-end">$${intCesantias.toLocaleString()}</td></tr>
+                <tr><td>Vacaciones</td><td>(${sal.toLocaleString()} * ${dias}) / 720</td><td class="text-end">$${vacaciones.toLocaleString()}</td></tr>
+                <tr class="table-danger h5 font-weight-bold"><td>TOTAL PRESTACIONES</td><td></td><td class="text-end">$${total.toLocaleString()}</td></tr>
+            </table>`;
     }
 
     function exportarExcel() {
-        let wb = XLSX.utils.book_new();
-        let ws_data = [
-            ["EMPRESA", document.getElementById('empresaNombre').value],
-            ["NIT", document.getElementById('empresaNit').value],
-            ["EMPLEADO", document.getElementById('tNombre').value],
-            ["CÉDULA", document.getElementById('tCedula').value],
-            ["DIAS", document.getElementById('tDias').value],
-            [""],
-            ["DETALLE DE LIQUIDACIÓN"],
+        const wb = XLSX.utils.book_new();
+        const data = [
+            ["VIBRAS POSITIVAS - LIQUIDADOR LABORAL"],
+            ["Empresa:", document.getElementById('empresaNombre').value],
+            ["Empleado:", document.getElementById('tNombre').value],
+            ["Identificación:", document.getElementById('tCedula').value],
+            ["Días:", document.getElementById('tDias').value],
+            ["Detalle Liquidación:"],
             [document.getElementById('detalleCalculos').innerText]
         ];
-        let ws = XLSX.utils.aoa_to_sheet(ws_data);
+        const ws = XLSX.utils.aoa_to_sheet(data);
         XLSX.utils.book_append_sheet(wb, ws, "Liquidacion");
         XLSX.writeFile(wb, "Liquidacion_VibrasPositivas.xlsx");
     }
 
     function enviarWhatsApp() {
-        const tel = "3117700431";
         const nombre = document.getElementById('tNombre').value;
+        const titulo = document.getElementById('resTitulo').innerText;
         const detalle = document.getElementById('detalleCalculos').innerText;
-        const texto = encodeURIComponent(`*LIQUIDACIÓN VIBRAS POSITIVAS*\n*Empleado:* ${nombre}\n*Detalle:*\n${detalle}`);
-        window.open(`https://wa.me/57${tel}?text=${texto}`);
-    }
-
-    function generarBackup() {
-        const datos = {
-            empresa: document.getElementById('empresaNombre').value,
-            nit: document.getElementById('empresaNit').value,
-            empleado: document.getElementById('tNombre').value,
-            salario: document.getElementById('tSalario').value
-        };
-        const blob = new Blob([JSON.stringify(datos)], {type: "application/json"});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `backup_liquidador_${datos.empleado}.json`;
-        a.click();
+        const msg = encodeURIComponent(`*${titulo}*\n*Empleado:* ${nombre}\n\n*Resumen:*\n${detalle}\n\n_Generado por Vibras Positivas (3117700431)_`);
+        window.open(`https://wa.me/573117700431?text=${msg}`);
     }
 </script>
 
